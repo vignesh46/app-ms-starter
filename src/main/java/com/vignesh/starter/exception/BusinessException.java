@@ -2,6 +2,9 @@ package com.vignesh.starter.exception;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Getter;
+
+@Getter
 public class BusinessException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
@@ -25,23 +28,5 @@ public class BusinessException extends RuntimeException {
 		this.httpstatus = httpstatus;
 		this.originalException = originalException;
 	}
-
-	public HttpStatus getHttpstatus() {
-		return httpstatus;
-	}
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-	public Exception getOriginalException() {
-		return originalException;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-	
-	
 
 }

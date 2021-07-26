@@ -1,3 +1,15 @@
 server:
   servlet:
     contextPath: /starter
+
+resttemplateconfig:
+  sample:
+    poolMax: 200
+    poolMaxPerRoute: 50
+    httpConnTimeOutInSeconds: 20
+    httpReadTimeOutInSeconds: 20
+  randomjoke:
+    poolMax: 200
+    poolMaxPerRoute: 50
+    httpConnTimeOutInSeconds: 20
+    httpReadTimeOutInSeconds: 20

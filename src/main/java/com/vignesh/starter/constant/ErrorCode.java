@@ -2,7 +2,9 @@ package com.vignesh.starter.constant;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Getter;
 
+@Getter
 public enum ErrorCode {
 
 	HTTP_SERVER_ERROR("HTTP_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR),
@@ -21,15 +23,5 @@ public enum ErrorCode {
 		this.code = code;
 		this.httpStatus = httpStatus;
 	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
-	}
 	
-	
-
 }
