@@ -13,3 +13,8 @@ resttemplateconfig:
     poolMaxPerRoute: 50
     httpConnTimeOutInSeconds: 20
     httpReadTimeOutInSeconds: 20
+  randomtenjokes:
+    poolMax: 200
+    poolMaxPerRoute: 50
+    httpConnTimeOutInSeconds: 20
+    httpReadTimeOutInSeconds: 20

@@ -1,13 +1,13 @@
-package com.vignesh.starter.domain;
+package com.vignesh.starter.client;
 
 import java.util.List;
 
 import com.vignesh.starter.beans.dto.Joke;
 
-public interface IStarterDomain {
-
-	Joke getRandomJoke();
+public interface IJokeClient {
 
 	List<Joke> getRandomTenJokes();
+
+	Joke getRandomJoke();
 
 }

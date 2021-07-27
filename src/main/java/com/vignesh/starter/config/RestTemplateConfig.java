@@ -39,6 +39,19 @@ public class RestTemplateConfig {
 
 		return restTemplate;
 	}
+	
+	@Bean("randomTenJokesTemplate")
+	RestTemplate randomTenJokesTemplate() {
+
+		HttpComponentsClientHttpRequestFactory requestFactory = restFactoryInit(
+				starterConfig.getRandomTenJokesMaxConnection(), starterConfig.getRandomTenJokesMaxPerRoute(),
+				starterConfig.getRandomTenJokesConnectionTimeOutInSeconds(),
+				starterConfig.getRandomTenJokesReadTimeOutInSeconds());
+
+		RestTemplate restTemplate = new RestTemplate(requestFactory);
+
+		return restTemplate;
+	}
 
 	protected HttpComponentsClientHttpRequestFactory restFactoryInit(int maxConnections, int maxPerRoute,
 			int connectTimeOut, int readTimeout) {

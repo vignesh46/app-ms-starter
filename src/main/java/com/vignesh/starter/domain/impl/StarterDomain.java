@@ -1,5 +1,7 @@
 package com.vignesh.starter.domain.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +22,10 @@ public class StarterDomain implements IStarterDomain {
 	public Joke getRandomJoke() {
 		return jokeService.getRandomJoke();
 	}
+	
+	@Override
+	public List<Joke> getRandomTenJokes() {
+		return jokeService.getRandomTenJokes();
+	}
+	
 }

@@ -32,5 +32,17 @@ public class StarterConfig {
 	
 	@Value("${resttemplateconfig.randomjoke.httpReadTimeOutInSeconds}")
 	private int randomJokeReadTimeOutInSeconds;
+	
+	@Value("${resttemplateconfig.randomtenjokes.poolMax}")
+	private int randomTenJokesMaxConnection;
+	
+	@Value("${resttemplateconfig.randomtenjokes.poolMaxPerRoute}")
+	private int randomTenJokesMaxPerRoute;
+	
+	@Value("${resttemplateconfig.randomtenjokes.httpConnTimeOutInSeconds}")
+	private int randomTenJokesConnectionTimeOutInSeconds;
+	
+	@Value("${resttemplateconfig.randomtenjokes.httpReadTimeOutInSeconds}")
+	private int randomTenJokesReadTimeOutInSeconds;
 
 }

@@ -1,9 +1,11 @@
-package com.vignesh.starter.client;
+package com.vignesh.starter.client.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -15,14 +17,16 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.vignesh.starter.beans.HttpRequestEntity;
+import com.vignesh.starter.client.IRestClient;
 import com.vignesh.starter.constant.ErrorCode;
 import com.vignesh.starter.exception.BusinessException;
 
 @Component
-public class RestClient {
+public class RestClient implements IRestClient {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 
+	@Override
 	public <T> ResponseEntity<T> invokeRequest(HttpRequestEntity httpRequestEntity, Class<T> responseType) {
 
 		HttpEntity<Object> httpEntity = new HttpEntity<>(httpRequestEntity.getBody(),
@@ -43,19 +47,62 @@ public class RestClient {
 		try {
 			responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, responseType, uriVariables);
 		} catch (HttpClientErrorException ex) {
-			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL{}", apiCode,
+			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL={}", apiCode,
 					ex.getRawStatusCode(), ex.getMessage(), url);
 			String errorMessage = generateErrorMessage(apiCode);
 			throw new BusinessException(ErrorCode.HTTP_CLIENT_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR,
 					errorMessage, ex);
 		} catch (HttpServerErrorException ex) {
-			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL{}", apiCode,
+			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL={}", apiCode,
 					ex.getRawStatusCode(), ex.getMessage(), url);
 			String errorMessage = generateErrorMessage(apiCode);
 			throw new BusinessException(ErrorCode.HTTP_SERVER_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR,
 					errorMessage, ex);
 		} catch (ResourceAccessException ex) {
-			LOG.error("ResourceAccessException Exception During HTTP Call for API={} with message={} URL{}", apiCode,
+			LOG.error("ResourceAccessException Exception During HTTP Call for API={} with message={} URL={}", apiCode,
+					ex.getMessage(), url);
+			String errorMessage = generateErrorMessage(apiCode);
+			throw new BusinessException(ErrorCode.HTTP_TIMEOUT_ISSUE.name(), HttpStatus.INTERNAL_SERVER_ERROR,
+					errorMessage, ex);
+		}
+
+		return responseEntity;
+	}
+	
+	@Override
+	public <T> ResponseEntity<List<T>> invokeRequestForList(HttpRequestEntity httpRequestEntity, ParameterizedTypeReference<List<T>> responseType) {
+
+		HttpEntity<Object> httpEntity = new HttpEntity<>(httpRequestEntity.getBody(),
+				httpRequestEntity.getHttpHeaders());
+		
+		return performHttpRequestForList(httpRequestEntity.getRestTemplate(), responseType, httpRequestEntity.getHttpMethod(),
+				httpEntity, httpRequestEntity.getUriVariables(), httpRequestEntity.getUrl(),
+				httpRequestEntity.getApiCode());
+
+	}
+
+	private <T> ResponseEntity<List<T>> performHttpRequestForList(RestTemplate restTemplate, ParameterizedTypeReference<List<T>> responseType,
+			HttpMethod httpMethod, HttpEntity<Object> httpEntity, Map<String, String> uriVariables, String url,
+			String apiCode) {
+
+		ResponseEntity<List<T>> responseEntity = null;
+
+		try {
+			responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, responseType, uriVariables);
+		} catch (HttpClientErrorException ex) {
+			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL={}", apiCode,
+					ex.getRawStatusCode(), ex.getMessage(), url);
+			String errorMessage = generateErrorMessage(apiCode);
+			throw new BusinessException(ErrorCode.HTTP_CLIENT_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR,
+					errorMessage, ex);
+		} catch (HttpServerErrorException ex) {
+			LOG.error("Exception During HTTP Call for API={} with status={} message={} URL={}", apiCode,
+					ex.getRawStatusCode(), ex.getMessage(), url);
+			String errorMessage = generateErrorMessage(apiCode);
+			throw new BusinessException(ErrorCode.HTTP_SERVER_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR,
+					errorMessage, ex);
+		} catch (ResourceAccessException ex) {
+			LOG.error("ResourceAccessException Exception During HTTP Call for API={} with message={} URL={}", apiCode,
 					ex.getMessage(), url);
 			String errorMessage = generateErrorMessage(apiCode);
 			throw new BusinessException(ErrorCode.HTTP_TIMEOUT_ISSUE.name(), HttpStatus.INTERNAL_SERVER_ERROR,
